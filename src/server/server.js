@@ -21,12 +21,11 @@ app.use(express.static('dist'));
 
 // get route
 app.get('/', (req, res) => {
-    //res.status(200).send(projectData);
     res.sendFile('dist/index.html');
 })
 
 app.get('/', (req, res) => {
-    res.send(projectData);
+    res.status(200).send(projectData);
 })
   
 // post route 
