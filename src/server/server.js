@@ -21,7 +21,12 @@ app.use(express.static('dist'));
 
 // get route
 app.get('/', (req, res) => {
-    res.status(200).send(projectData);
+    //res.status(200).send(projectData);
+    res.sendFile('dist/index.html');
+})
+
+app.get('/', (req, res) => {
+    res.send(projectData);
 })
   
 // post route 
@@ -35,6 +40,6 @@ app.post('/', (req, res) => {
 })
 
 //server setup
-app.listen(3000, ()=>{
-    console.log(`server is running in port 3000`);
+app.listen(8081, ()=>{
+    console.log(`server is running in port 8081`);
 })

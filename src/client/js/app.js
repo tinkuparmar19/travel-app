@@ -29,6 +29,7 @@ const saveData = async (path, data) => {
     try {
       await fetch(path, {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -47,7 +48,7 @@ const updateUi = async (newTemp, newDate, newFeelings) =>{
 }
 
 //event listener
-generate.addEventListener('click', ()=>{
+ function handleSubmit() { generate.addEventListener('click', ()=>{
     weatherData(url, zip.value, countryCode.value, api_key)
     .then(temp => {
         return {date: newDate, temp, content: feelings.value}
@@ -61,3 +62,7 @@ generate.addEventListener('click', ()=>{
         console.error(e)
     })  
 })
+}
+
+handleSubmit();
+export {handleSubmit}
