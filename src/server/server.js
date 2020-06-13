@@ -5,9 +5,21 @@ projectData = {};
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
 //start instance of express app
 const app = express();
+
+//geonames
+const usernameGeo = process.env.username;
+const baseurlGeo = process.env.geoBaseUrl;
+
+//weatherbit
+const weatherbitkey = process.env.weatherBitApi;
+
+//pixabay 
+const pixabaykey = process.env.pixabayApi
 
 //bodyParser as a middleware
 app.use(bodyParser.urlencoded({extended: true}));
@@ -25,21 +37,45 @@ app.get('/', (req, res) => {
     res.sendFile('dist/index.html');
 })
 
-app.get('/', (req, res) => {
-    res.send(projectData);
-})
-  
-// post route 
-app.post('/', (req, res) => {
-    const {date, temp, content} = req.body
-    projectData[date] = {
-      temp,
-      content,
+//fetching geonames
+getCityData = async city => {
+    try {
+        const result = await fetch(`${baseurlGeo}q=${city}&maxRows=10&username=${usernameGeo}`)
+        const cities = result.json()
+        console.log(cities)
+        return cities
+    }catch(e){
+        throw e
     }
-    res.status(201).send()
+}
+
+//get city
+app.post('/cities', async(req, res)=>{
+    try{
+        const term = req.body
+        const data = await getCityData(term)
+        res.send(data)
+    }catch(e){
+        throw e
+    }
 })
 
 //server setup
 app.listen(8081, ()=>{
     console.log(`server is running in port 8081`);
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
