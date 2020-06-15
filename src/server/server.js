@@ -1,5 +1,5 @@
 //empty js object which act as endpoint for all routes
-projectData = {};
+//projectData = {};
 
 //require express bodyParser and cors
 const express = require('express');
@@ -22,7 +22,7 @@ const weatherbitkey = process.env.weatherBitApi;
 const pixabaykey = process.env.pixabayApi
 
 //bodyParser as a middleware
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 //cors for cross origin allowance
@@ -33,43 +33,21 @@ app.use(express.static('dist'));
 
 // get route
 app.get('/', (req, res) => {
+    //res.status(200).send(projectData);
     res.sendFile('dist/index.html');
 })
-
-<<<<<<< HEAD
-app.get('/', (req, res) => {
-    res.status(200).send(projectData);
-})
-  
-// post route 
-app.post('/', (req, res) => {
-    const {date, temp, content} = req.body
-    projectData[date] = {
-      temp,
-      content,
-=======
-//fetching geonames
-getCityData = async city => {
-    try {
-        const result = await fetch(`${baseurlGeo}q=${city}&maxRows=10&username=${usernameGeo}`)
-        const cities = result.json()
-        console.log(cities)
-        return cities
-    }catch(e){
-        throw e
-    }
-}
 
 //get city
 app.post('/cities', async(req, res)=>{
     try{
-        const term = req.body
-        const data = await getCityData(term)
-        res.send(data)
-    }catch(e){
-        throw e
->>>>>>> secondbranch
+        const city = req.body.term
+        const result = await fetch(`${baseurlGeo}q=${city}&maxRows=10&username=${usernameGeo}`)
+        const cities = await result.json()
+        console.log(cities)
+    } catch(error){
+        throw error 
     }
+    res.send(cities)
 })
 
 //server setup

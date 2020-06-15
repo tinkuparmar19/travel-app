@@ -17,8 +17,8 @@ function handleSubmit() { generate.addEventListener('click', ()=>{
     },
     body: JSON.stringify({term: city.value})
   })
-  console.log(result)
-}).then(res => console.log(res))
+   .then(res => console.log(res))
+})
 }
 
 //handleSubmit();
