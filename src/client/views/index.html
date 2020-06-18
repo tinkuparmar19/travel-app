@@ -6,21 +6,26 @@
     </head>
     <body>
           <div class ="headline">
-            Weather Journal App
+            TRAVEL PLANNER
           </div>
           <div class ="date">
-            <label for="date">Enter date here</label><br>
+            <label for="date">Enter date here</label>
             <input type="text" id="date" placeholder="Ex : 09-05-20">
-          </div>
+          </div><br>
           <div class ="city">
-            <label for="city">Enter city here</label><br>
+            <label for="city">Enter city here</label>
             <input type="text" id="city" placeholder="Ex : chicago">
-          </div>
+          </div><br>
           <button id="generate" type = "submit"> Generate </button>
           <div class ="entry">
-            <div id = "latitude"></div> 
-            <div id = "longitude"></div>
-            <div id = "country"></div>
+            <div id = "location"></div> 
+            <div id = "weather">
+              <p id="tmax"></p>
+              <p id="tmin"></p>
+              <p id="summary"></p>
+            </div>
+            <div id="date"></div>
+            <div id = "picture"></div>
           </div>
     </body>
 </html>

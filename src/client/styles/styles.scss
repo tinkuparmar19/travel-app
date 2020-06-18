@@ -1,46 +1,49 @@
 body {
-    background-image: linear-gradient(to bottom, rgba(0,0,255,1), rgba(0,0,255,0));
     height: 100vh;
     text-align: center;
 }
 
 .headline {
     font-size: 40px;
-    color: #fff;
+    color: #252a2a;
+    background-color: #3752ec;
     margin: 20px;
 }
 
 .date {
-    margin-bottom: 50px;
+    display: inline;
+    padding: 5px 10px;
 }
 
 .city {
-    margin-bottom: 50px;
+    display: inline;
 }
 
 label {
-    color: #fff;
+    color: #252a2a;
     font-size: 20px;
 }
 
 input {
     margin: 10px;
     height: 20px;
+    border: 1px solid #37a8a8;
+    border-radius: 3px;
 }
 
+#generate {
+}
 
 button {
     cursor: pointer;
     color: #fff;
-    background-color: rgba(0,0,255,0.8);
+    background-color: #252a2a;
     padding: 5px 10px;
+    margin: 20px;
 }
 
 .entry {
-    position: absolute;
-    top: 20px;
-    left: 50px;
-    color: #fff;
+    color: #252a2a;
     padding: 20px;
     font-size: 25px;
 }
