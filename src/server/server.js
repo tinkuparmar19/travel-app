@@ -105,11 +105,11 @@ app.post('/trip', async (req, res) => {
         const city = req.body.location
         //console.log(city)
       const {lat, lng, location} = await fetchCityData(city)
-      console.log(lat + " " + lng + " " + location)
+     //console.log(lat + " " + lng + " " + location)
       const weather = await fetchCityForcast(lat, lng)
-      console.log(weather)
+      //console.log(weather)
       const picture = await fetchCityImage(location)
-      console.log(picture)
+      //console.log(picture)
       const trip = {
         location,
         weather,

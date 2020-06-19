@@ -4,24 +4,28 @@ const city = document.getElementById('city');
 const generate = document.getElementById('generate');
 
 //get date difference
-const difference = (
-  (new Date(date.value).getTime() - new Date().getTime()) /
-  (1000 * 60 * 60 * 24)
-).toFixed(0)
+const dateDiffer = (date) => {
+  const date1 = new Date(date).getTime()
+  const date2 = new Date().getTime()
+  const data = Math.floor((date1 - date2) / (1000 * 60 * 60 * 24))
+  return data
+}
+
+//get api data
 
 const getTrips = async () => {
   try {
     const result = await fetch('http://localhost:3000/trips')
     const trips = await result.json()
+    const day = dateDiffer(date.value)
     if (trips.length > 0) {
       trips.forEach(trip => {
         const {location, weather, picture} = trip
-        document.getElementById('location').innerHTML = location
-        document.getElementById('tmax').innerHTML = weather.max_temp
-        document.getElementById('tmin').innerHTML = weather.min_temp
-        document.getElementById('summary').innerHTML = weather.summary
-        document.getElementById('date').innerHTML = difference
-        document.getElementById('picture').innerHTML = picture
+        document.getElementById('cityname').innerHTML = `${day} days to go for ${location}`
+        document.getElementById('tmax').innerHTML = `maximum temprature = ${weather.max_temp}c`
+        document.getElementById('tmin').innerHTML = `minimum temprature = ${weather.min_temp}c`
+        document.getElementById('summary').innerHTML = `weather summary = ${weather.summary}`
+        document.getElementById('picture').innerHTML = `<img src="${picture}">`
       })
     }
   } catch (e) {
@@ -29,7 +33,9 @@ const getTrips = async () => {
   }
 }
 
-const saveTrip = async (location, date) => {
+//fetch api using city name
+
+const saveTrip = async (location) => {
   const result = await fetch('http://localhost:3000/trip/', {
     method: 'POST',
     mode: 'cors',
@@ -46,8 +52,10 @@ const saveTrip = async (location, date) => {
   }
 }
 
+//eventlistener
+
 function handleSubmit() { generate.addEventListener('click', ()=>{
-  saveTrip(city.value, date.value);
+  saveTrip(city.value);
 })
 }
 
