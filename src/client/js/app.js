@@ -15,13 +15,13 @@ const dateDiffer = (date) => {
 
 const getTrips = async () => {
   try {
-    const result = await fetch('http://localhost:3000/trips')
+    const result = await fetch('http://localhost:8000/trips')
     const trips = await result.json()
     const day = dateDiffer(date.value)
     if (trips.length > 0) {
       trips.forEach(trip => {
         const {location, weather, picture} = trip
-        document.getElementById('cityname').innerHTML = `${day} days to go for ${location}`
+        document.getElementById('cityname').innerHTML = `${day+1} days to go for ${location}`
         document.getElementById('tmax').innerHTML = `maximum temprature = ${weather.max_temp}c`
         document.getElementById('tmin').innerHTML = `minimum temprature = ${weather.min_temp}c`
         document.getElementById('summary').innerHTML = `weather summary = ${weather.summary}`
@@ -35,15 +35,15 @@ const getTrips = async () => {
 
 //fetch api using city name
 
-const saveTrip = async (location) => {
-  const result = await fetch('http://localhost:3000/trip/', {
+const saveTrip = async (location, tripDate) => {
+  const result = await fetch('http://localhost:8000/trip', {
     method: 'POST',
-    mode: 'cors',
-    credentials: 'same-origin',
+    // mode: 'cors',
+    // credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({location}),
+    body: JSON.stringify({location, tripDate}),
   })
   if (!result.ok) {
     console.log("We weren't able to save your trip. Please try again.")
@@ -55,7 +55,7 @@ const saveTrip = async (location) => {
 //eventlistener
 
 function handleSubmit() { generate.addEventListener('click', ()=>{
-  saveTrip(city.value);
+  saveTrip(city.value, date.value);
 })
 }
 

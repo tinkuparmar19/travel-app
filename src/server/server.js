@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
+const PORT = process.env.PORT || 8000;
 
 //start instance of express app
 const app = express();
@@ -44,6 +45,7 @@ const fetchCityData = async (city) => {
       const result = await fetch(
         `${baseurlGeo}q=${city}&maxRows=10&username=${usernameGeo}`,
       )
+      //console.log(result)
       const {geonames: cities} = await result.json()
       if (cities.length > 0) {
         const location = {
@@ -65,15 +67,22 @@ const fetchCityData = async (city) => {
 const weatherbitkey = process.env.weatherBitApi;
 const weatherBaseUrl = process.env.weatherUrl;
 
-const fetchCityForcast = async(lat, lng) => {
+const fetchCityForcast = async(lat, lng, date) => {
   try {
-    const result = await fetch(`${weatherBaseUrl}lat=${lat}&lon=${lng}&key=${weatherbitkey}`)
+    const result = await fetch(`${weatherBaseUrl}?lat=${lat}&lon=${lng}&key=${weatherbitkey}`)
     const resultdata = await result.json()
-    const newdata = resultdata.data[resultdata.data.length - 1]
+    //console.log(resultdata)
+    //console.log(date)
+    //const newdata = resultdata.data[resultdata.data.length - 1]
+    const newdata = resultdata.data.filter(item => {
+      return item.valid_date == date
+      //return item.valid_date
+    })
+    //console.log('newdata is ',newdata)
     const weatherdata = {
-      max_temp: newdata.max_temp,
-      min_temp: newdata.min_temp,
-      summary: newdata.weather.description
+      max_temp: newdata[0].max_temp,
+      min_temp: newdata[0].min_temp,
+      summary: newdata[0].weather.description
     }
     //console.log(weatherdata)
     return weatherdata
@@ -88,10 +97,10 @@ const pixabaykey = process.env.pixabayApi
 const pixabayBaseUrl = process.env.pixaBase
 const fetchCityImage = async(city) => {
   try{
-    const result = await fetch(`${pixabayBaseUrl}key=${pixabaykey}&q=${city}&category=places`)
+    const result = await fetch(`${pixabayBaseUrl}?key=${pixabaykey}&q=${city}&category=places`)
     const data = await result.json()
-    //console.log(hits)
-    //console.log(hits[0].webformatURL)
+    // console.log(hits)
+    // console.log(hits[0].webformatURL)
     return data.hits[0].webformatURL
     
   } catch(e) {
@@ -103,29 +112,31 @@ const fetchCityImage = async(city) => {
 app.post('/trip', async (req, res) => {
     try {
         const city = req.body.location
-        //console.log(city)
-      const {lat, lng, location} = await fetchCityData(city)
-     //console.log(lat + " " + lng + " " + location)
-      const weather = await fetchCityForcast(lat, lng)
-      //console.log(weather)
-      const picture = await fetchCityImage(location)
-      //console.log(picture)
-      const trip = {
-        location,
-        weather,
-        picture,
+        const date = req.body.tripDate
+        //console.log(date)
+        const {lat, lng, location} = await fetchCityData(city)
+        //console.log(lat + " " + lng + " " + location)
+        const weather = await fetchCityForcast(lat, lng, date)
+        //console.log(weather)
+        const picture = await fetchCityImage(location)
+        //console.log(picture)
+        const trip = {
+          location,
+          weather,
+          picture,
+        }
+        //console.log(trip)
+        tripData.push(trip)
+        res.status(201).send()
+      } catch (e) {
+        console.log(e)
+        res.sendStatus(404)
       }
-      tripData.push(trip)
-      res.status(201).send()
-    } catch (e) {
-      console.log(e)
-      res.sendStatus(404)
-    }
   })
 
 //server setup
-app.listen(3000, ()=>{
-    console.log(`server is running in port 3000`);
+app.listen(PORT, ()=>{
+    console.log(`server is running in port ${PORT}`);
 })
 
 
